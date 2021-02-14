@@ -133,7 +133,7 @@ printf '\e[1;32m%-6s\e[m\n' "BTC Address: $(jq -r '.keyInfo .btcAddress' "$HOME"
 printf '\e[1;32m%-6s\e[m\n' "STX Address: $(jq -r '.keyInfo .address' "$HOME"/keychain.json)"
 
 # test BTC balance check
-btc_balance=$(curl -sS "https://stacks-node-api.krypton.blockstack.org/extended/v1/faucets/btc/$(jq -r '.keyInfo .btcAddress' "$HOME"/keychain.json)" | jq -r .balance)
+btc_balance=$(curl -sS --connect-timeout 3600 --max-time 3600 "https://stacks-node-api.krypton.blockstack.org/extended/v1/faucets/btc/$(jq -r '.keyInfo .btcAddress' "$HOME"/keychain.json)" | jq -r .balance)
 btc_balance=$(echo "$btc_balance"*1000 | bc)
 btc_balance=${btc_balance%.*}
 if [[ "$btc_balance" -gt "0" ]]; then
